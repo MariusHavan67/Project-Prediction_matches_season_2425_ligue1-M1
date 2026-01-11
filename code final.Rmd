@@ -78,7 +78,7 @@ matches <- matches %>%
   arrange(Date)                                   
 ```
 
-II) Phase 1 : Entraînement (apprentissage) sur les données des saisons 2021-2022, 2022-2023 et 2023-2024 réalisé notamment grâce à la création de features 
+I) Phase 1 : Entraînement (apprentissage) sur les données des saisons 2021-2022, 2022-2023 et 2023-2024 réalisé notamment grâce à la création de features 
 
 1) Création des nouvelles variables 
 
@@ -345,7 +345,7 @@ accuracy
 ```
 
 
-IV) Phase 3 : Prédiction des probabilités sur la saison 2025–2026 
+III) Phase 3 : Prédiction des probabilités sur la saison 2025–2026 
 
 1) Génération des probabilités de victoire pour les matchs déjà joués de la saison 25/26  
 
@@ -423,7 +423,7 @@ knitr::kable(top10_pred_inc)
 
 2) Génération des probabilités de victoire pour les matchs futurs de la saison 25/26 
 
-(i)Ajout des rencontres non disponible dans la base de donnée 25/26 
+(i) Ajout des rencontres non disponible dans la base de donnée 25/26 
 
 ```{r}
 #Journées 17 à 22
@@ -812,14 +812,14 @@ fiche_predictions <- fiche_predictions %>%
       ))
 ```
 
-V) L'Interface
+(xix) L'interface
 
 ```{r}
 ui <- fluidPage(
   
   theme = shinytheme("flatly"),
   
-  titlePanel("⚽ Prédiction des probabilités de match"),
+  titlePanel("Prédiction des probabilités de match"),
   
   sidebarLayout(
     
@@ -969,5 +969,6 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 
 ```
+
 
 
