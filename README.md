@@ -83,7 +83,7 @@ Après cela, nous nous attarderons sur la performance d'une modélisation par ap
 Enfin, on va essayé de prédire les résultats de match, du moins leurs probabilités, pour les matchs à venir sur la saison actuelle 2025-2026 (matchs d'après trêve).
 On concluera ensuite quant aux résultats de notre modèle tout en énoncant ses différentes limites.
 
-# II) Phase 1 : Entraînement (apprentissage) sur les données des saisons 2021-2022, 2022-2023 et 2023-2024 réalisé notamment grâce à la création de features 
+# I) Phase 1 : Entraînement (apprentissage) sur les données des saisons 2021-2022, 2022-2023 et 2023-2024 réalisé notamment grâce à la création de features 
 
 ## 1) Création des nouvelles variables 
 On code les features principales :
@@ -230,7 +230,7 @@ team_cum_pts <- team_points %>%
   group_by(team, season) %>%                                                    #Regroupement par équipe et par saison, le cumul repart donc à zéro au début de chaque saison.
   mutate(
     cum_pts_before = lag(cumsum(points), default = 0)                           #cumsum(points) calcule la somme cumulée incluant le match courant
-                                                                                #lag(...) décale cette somme d'un match, on obtient ainsi le nombre de points cumulés avant le match courant
+                                                                                #lag(...) décale cette somme d'un match, on obtient ainsi le nombre de points cumulés avant le match                                                                                  #courant.
    ) %>%
   ungroup() %>%
   select(match_id, team, season, cum_pts_before)
@@ -287,11 +287,9 @@ team_goals <- matches %>%
   ) %>%
   
   mutate(
-    # buts marqués (goals_for) et buts encaissés (goals_against)
-    # dépendent du fait d'être à domicile ou à l'extérieur
     goals_for = if_else(side == "HomeTeam", FTHG, FTAG),                        #Buts marqués (goals_for)
     goals_against = if_else(side == "HomeTeam", FTAG, FTHG),                    #Buts encaissés (goals_against), les deux dépendent du fait d'être à domicile ou à l'extérieur.
-    across(c(goals_for, goals_against), ~ replace_na(.x, 0))                    #On remplace les deux seuls NA dans team_goals car sinon les NA se propagent ensuite dans tous les cumuls de matches.
+    across(c(goals_for, goals_against), ~ replace_na(.x, 0))                    #On remplace les deux seuls NA dans team_goals car sinon les NA se propagent ensuite dans tous les                                                                                    #cumuls de matches.
     ) %>%                                                                       
   
   select(match_id, Date, season, team, goals_for, goals_against)
@@ -301,10 +299,10 @@ team_goals <- matches %>%
 team_cum_goals <- team_goals %>%
   group_by(team, season) %>%                                                    #Reset au début de chaque saison
   mutate(
-    cum_gf_including = cumsum(goals_for),                                       #Addition des buts marqués match après match en incluant le match courant. On ne peut pas utiliser tel quel.
-    cum_ga_including = cumsum(goals_against),                                   #Addition des buts encaissés match après match en incluant le match courant. On ne peut pas utiliser tel quel.
+    cum_gf_including = cumsum(goals_for),                                       #Addition des buts marqués match après match en incluant le match courant. On ne peut pas utiliser                                                                                    #tel quel.
+    cum_ga_including = cumsum(goals_against),                                   #Addition des buts encaissés match après match en incluant le match courant. On ne peut pas utiliser                                                                                  #tel quel.
     cum_gf_before = lag(cum_gf_including, default = 0),                         #On décale d'un match pour obtenir le cumul avant le match courant
-    cum_ga_before = lag(cum_ga_including, default = 0),                         #default = 0 : pour le premier match de la saison on considère que l'équipe a 0 but cumulé avant de jouer.
+    cum_ga_before = lag(cum_ga_including, default = 0),                         #default = 0 : pour le premier match de la saison on considère que l'équipe a 0 but cumulé avant de                                                                                   #jouer.
     cum_gd_before = cum_gf_before - cum_ga_before                               #Différence de buts cumulée avant le match = buts marqués - buts encaissés
   ) %>%                                                                         #Différence positive veut dire que l'équipe est perfomante
                                                                                 #Différence négative veut dire que l'équipe est en difficulté
@@ -339,13 +337,13 @@ matches <- matches %>%
 
 matches <- matches %>%
   mutate(
-    cum_gf_diff = home_cum_gf - away_cum_gf,                                    #Différence entre les buts marqués cumulés par l'équipe à domicile et l'équipe extérieur, cela mesure la puissance offensive                                                                                 #relative des deux équipes qui s'affrontent au match courant. 
-                                                                                #Si cum_gf_diff > 0, l'équipe à domicile a marqué plus de buts que celle extérieur depuis le début de la saison. 
-                                                                                #Si cum_gf_diff < 0, l'équipe extérieur a marqué plus de buts que celle à domicile depuis le début de la saison.
+    cum_gf_diff = home_cum_gf - away_cum_gf,                                    #Différence entre les buts marqués cumulés par l'équipe à domicile et l'équipe extérieur, cela mesure                                                                                 #la puissance offensive relative des deux équipes qui s'affrontent au match courant. 
+                                                                                #Si cum_gf_diff > 0, l'équipe à domicile a marqué plus de buts que celle extérieur depuis le début de                                                                                 #la saison. 
+                                                                                #Si cum_gf_diff < 0, l'équipe extérieur a marqué plus de buts que celle à domicile depuis le début de                                                                                 #la saison.
     
-    cum_ga_diff = home_cum_ga - away_cum_ga,                                    #Différence entre les buts encaissés cumulés par l'équipe à docimile et l'équipe extérieure, moins on encaisse mieux c'est                                                                                    donc le signe est contre-intuitif.
-                                                                                #Si cum_ga_diff > 0, l'équipe domicile a un désavantage défensif. Elle a encaissé plus de but que l'équipe extérieur.
-                                                                                #Si cum_ga_diff < 0, l'équipe domicile a un avantage défensif. Elle a encaissé moins de but que l'équipe extérieur
+    cum_ga_diff = home_cum_ga - away_cum_ga,                                    #Différence entre les buts encaissés cumulés par l'équipe à docimile et l'équipe extérieure, moins on                                                                                 #encaisse mieux c'est donc le signe est contre-intuitif.                                                     
+                                                                                #Si cum_ga_diff > 0, l'équipe domicile a un désavantage défensif. Elle a encaissé plus de but que                                                                                     #l'équipe extérieur.
+                                                                                #Si cum_ga_diff < 0, l'équipe domicile a un avantage défensif. Elle a encaissé moins de but que                                                                                       #l'équipe extérieur.
     cum_gd_diff = home_cum_gd - away_cum_gd                                     #La différence entre les buts cumulés de l'équipe domicile et extérieur.
   )                                                                             #cum_gd_diff > 0, l'équipe domicile est globalement supérieur à l'équipe extérieur (avantage net).
                                                                                 #cum_gd_diff < 0, l'équipe domicile est globalement inférieur à l'équilibre extérieur (avantage net).
