@@ -906,7 +906,7 @@ Matchs futurs trouvés : 153 la date post-trêve et la présence de fixtures uni
 
 Matchs prédictibles (features OK) : 153 veut dire que pour tous ces 153 matchs, nous avons bien les trois features (form_diff_lastN, cum_pts_diff, cum_gd_diff) calculées, donc il n’y a pas de données manquantes empêchant la prédiction.
 
-### (vii) Prédiction (sécurisée H/D/A)
+### (vii) Prédiction (sécuriser H/D/A)
 Ici on applique le modèle multinomial entraîné pour prédire les résultats H/D/A des matchs futurs pour lesquels les features sont disponibles. On sécurise le résultat pour gérer les cas particuliers :
 - si un seul match, on force la sortie en matrice 1x3
 - si certaines colonnes H/D/A sont manquantes, on les crée avec des 0
@@ -969,14 +969,14 @@ fiche_predictions <- fiche_predictions %>%
       ))
 ```
 
-# (xix) L'interface
+### (xix) L'interface
 
 ```{r}
 ui <- fluidPage(
   
   theme = shinytheme("flatly"),
   
-  titlePanel("⚽ Prédiction des probabilités de match"),
+  titlePanel("Prédiction des probabilités de match"),
   
   sidebarLayout(
     
