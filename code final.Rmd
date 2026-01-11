@@ -812,7 +812,7 @@ fiche_predictions <- fiche_predictions %>%
       ))
 ```
 
-(xix) L'interface
+IV) Construction de l'interface
 
 ```{r}
 ui <- fluidPage(
@@ -969,6 +969,7 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 
 ```
+
 
 
 
