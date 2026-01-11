@@ -518,9 +518,9 @@ pred_2526_out <- pred_2526 %>%
   arrange(Date)
 ```
 
-### (iv) Illustration : matchs très déséquilibrés vs matches très incertains 
+### (iv) Illustration : matchs très déséquilibrés vs matchs très incertains 
 
-Ici on a les matchs les plus déséquilibrés :
+Ici, on a les matchs les plus déséquilibrés :
 
 ```{r}
 top10_pred_des <- pred_2526_out %>%
@@ -530,9 +530,9 @@ top10_pred_des <- pred_2526_out %>%
 saveRDS(top10_pred_des, "top10_pred_des.rds")
 knitr::kable(top10_pred_des)
 ```
-Ces matches oppposent généralement une équipe en forte dynamique à une équipe en difficulté.
+Ces matchs oppposent généralement une équipe en forte dynamique à une équipe en difficulté.
 
-Ici on a les matchs les plus incertains :
+Ici, on a les matchs les plus incertains :
 
 ```{r}
 top10_pred_inc <- pred_2526_out %>%
