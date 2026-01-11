@@ -101,12 +101,12 @@ matches <- matches %>%
   arrange(Date) %>%
   mutate(
     home_points = case_when(                                                    #Attribution des points pour l'équipe à domicile.
-      FTR == "H" ~ 3,                                                           #Victoire pour l'équipe à domicile et donc rajout de 3 points pour leur classement.
+      FTR == "H" ~ 3,                                                           #Victoire pour l'équipe à domicile et donc rajout de 3 points à cette équipe dans le classement.
       FTR == "D" ~ 1,                                                           #Match nul donc gain d'un point.
       TRUE ~ 0                                                                  #Dans le dernier cas (défaite), aucun gain.
     ),
     away_points = case_when(                                                    #Attribution des points pour l'équipe à l'extérieur.
-      FTR == "A" ~ 3,                                                           #Victoire pour l'équipe à l'extérieur et donc rajoute de 3 pour leur classement.
+      FTR == "A" ~ 3,                                                           #Victoire pour l'équipe à l'extérieur et donc rajout de 3 points à cette équipe dans le classement.
       FTR == "D" ~ 1,                                                           #Match nul donc gain d'un point.
       TRUE ~ 0                                                                  #Dans le dernier cas (défaite), aucun gain.
     ),
@@ -151,7 +151,7 @@ team_matches <- matches %>%
 team_form <- team_matches %>%
   group_by(team) %>%
   mutate(
-    form_pts_lastN = slide_dbl(                                                 #Calcule une statistique sur une fenêtre glissante (rolling window) et renvoie un vecteur numérique (dbl).
+    form_pts_lastN = slide_dbl(                                                 #Calcule une statistique sur une fenêtre glissante (rolling window) et renvoie un vecteur numérique.(dbl).
       
       .x = lag(points),                                                         #.x est la série sur laquelle on calcule le rolling.
                                                                                 #lag(points) veut dire qu'on décale d'une ligne vers le bas (on exclut le match actuel).
@@ -172,24 +172,24 @@ team_form <- team_matches %>%
   ) %>%
   
   ungroup() %>%                                                                 #ungroup() permet de retirer le group_by (bonne pratique pour éviter des effets de bord) 
-                                                                                #Regarder ce qu'est un effet de bord si incompris.
+                                                                                #Un effet de bord c'est lorsqu'on a fait un regroupement sur une ou des colonne(s) et qu'après                                                                                        #avoir fait ce qu'on avait à faire pour cette colonne, les fonctions d'après sont toujours appliquées                                                                                 #à cette colonne alors que ce n'est pas le but.
   select(match_id, team, form_pts_lastN)                                        #On garde seulement les colonnes nécessaires au join final
                                                                                 
 #Troisième Étape : 
 
-matches <- matches %>%                                                          #Join forme pour l'équipe à domicile
+matches <- matches %>%                                                          #Join pour l'équipe à domicile.
   left_join(
     team_form %>% rename(home_form_pts_lastN = form_pts_lastN),
     by = c("match_id", "HomeTeam" = "team")
   )
 
-matches <- matches %>%                                                          #Join forme pour l'équipe à l'extérieur
+matches <- matches %>%                                                          #Join pour l'équipe à l'extérieur.
   left_join(
     team_form %>% rename(away_form_pts_lastN = form_pts_lastN),
     by = c("match_id", "AwayTeam" = "team")
   )
 
-matches <- matches %>%                                                          #Différence de forme (domicile - extérieur)
+matches <- matches %>%                                                          #Différence de forme (domicile - extérieur).
   mutate(form_diff_lastN = home_form_pts_lastN - away_form_pts_lastN)
 ```
 
@@ -220,7 +220,7 @@ team_points <- matches %>%
     values_to = "team"                                                          #Nom de l'équipe.
   ) %>%
   mutate(
-    points = if_else(side == "HomeTeam", home_points, away_points)              #Création d'une variable unique "points", elle prend la valeur home_points ou away_points selon le rôle de l'équipe.
+    points = if_else(side == "HomeTeam", home_points, away_points)              #Création d'une variable unique "points", elle prend la valeur home_points ou away_points selon le                                                                                    #rôle de l'équipe.
   ) %>%
   select(match_id, Date, season, team, points)                                  #On conserve uniquement les colonnes utiles pour le calcul des cumuls.
 
