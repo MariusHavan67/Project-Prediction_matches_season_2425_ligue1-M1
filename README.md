@@ -967,7 +967,7 @@ fiche_predictions <- fiche_predictions %>%
       ))
 ```
 
-### (xix) L'interface
+# IV) Phase 4 : Construction de l'interface
 
 ```{r}
 ui <- fluidPage(
