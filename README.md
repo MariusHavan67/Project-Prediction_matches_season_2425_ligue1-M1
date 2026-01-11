@@ -13,7 +13,7 @@ library(shiny)
 library(shinythemes)
 library(data.table)
 ```
-# I) Introduction
+# Introduction
 
 ## 1) Nettoyage des données
 ### (i) Importation des jeux de données de toutes les saisons.
