@@ -78,6 +78,7 @@ Afin d'entraîner notre modèle statistique d'apprentissage, il est nécessaire 
 - Celui de la forme récente entre les deux équipes qui s'affrontent lors d'un match
 - Celui des points cumulés entre les deux équipes qui s'affrontent lors d'un match
 - Celui des buts cumulés (différence entre les buts marqués et encaissés) de l'équipe domicile et extérieur avant le match.
+
 Après cela, nous nous attarderons sur la performance d'une modélisation par apprentissage statistique, grâce à l'entraînement de nos features sur les trois saisons précédentes, en l'évaluant sur la saison 2024-2025. A l'aide d'un modèle multinomial on va déterminer la précision de ce dernier à prédire les probabilités d'issues d'un match de football. 
 Enfin, on va essayé de prédire les résultats de match, du moins leurs probabilités, pour les matchs à venir sur la saison actuelle 2025-2026 (matchs d'après trêve).
 On concluera ensuite quant aux résultats de notre modèle tout en énoncant ses différentes limites.
@@ -254,7 +255,8 @@ matches <- matches %>%
   )
 ```
 
-On a donc créée trois nouvelles variables
+On a donc créée trois nouvelles variables :
+
 - Les points cumulés de l'équipe à domicile avant le match (home_cum_points).
 - Les points cumulés de l'équipe à l'extérieur avant le match (away_cum_pts).
 - L'avantage en points cumulés (cum_pts_diff), qui est la différence entre les points cumulés de l'équipe à domicile (home_cum_pts) et extérieur (away_cum_pts) avant le match.
@@ -440,7 +442,7 @@ test_data <- test_data %>%
     pred_class = colnames(proba_test)[apply(proba_test, 1, which.max)])
 ```
 
-### (ii) Matrice de confusion et accruacy globale du modèle
+### (ii) Matrice de confusion et accuracy globale du modèle
 
 ```{r}
 confusion_matrix <- table(
@@ -457,9 +459,10 @@ accuracy
 Le modèle atteint une accuracy d’environ 54 % sur la saison 2024–2025, ce qui est significativement supérieur à une prédiction aléatoire (33 %).
 Ce résultat met en évidence la capacité du modèle à capter une partie des dynamiques de performance des équipes, tout en soulignant le caractère aléatoire du football.
 
-# IV) Phase 3 : Prédiction des probabilités sur la saison 2025–2026 
+# III) Phase 3 : Prédiction des probabilités sur la saison 2025–2026 
 
-## 1) Génération des probabilités de victoire pour les matchs déjà joués de la saison 25/26 L’objectif de cette phase est d’utiliser le modèle multinomial entraîné sur les saisons 2021–2022 à 2023–2024 et évalué sur la saison 2024–2025, afin de prédire les probabilités de victoire à domicile (H), de match nul (D) et de victoire à l’extérieur (A) pour tous les matches de la saison 2025–2026. 
+## 1) Génération des probabilités de victoire pour les matchs déjà joués de la saison 25/26
+L’objectif de cette phase est d’utiliser le modèle multinomial entraîné sur les saisons 2021–2022 à 2023–2024 et évalué sur la saison 2024–2025, afin de prédire les probabilités de victoire à domicile (H), de match nul (D) et de victoire à l’extérieur (A) pour tous les matches de la saison 2025–2026. 
 
 Il s’agit de probabilités ex ante, fondées uniquement sur les informations disponibles avant chaque match : Forme récente, points cumulés, différentiel de buts cumulés. 
 Nous faisons bien attention qu'aucune information issue des résultats de la saison 2025–2026 n’est utilisée dans l’apprentissage du modèle, garantissant l’absence totale de fuite temporelle ou de bias. 
@@ -515,9 +518,9 @@ pred_2526_out <- pred_2526 %>%
   arrange(Date)
 ```
 
-### (iv) Illustration : matches très déséquilibrés vs matches très incertains 
+### (iv) Illustration : matchs très déséquilibrés vs matches très incertains 
 
-Ici Matches les plus déséquilibrés :
+Ici on a les matchs les plus déséquilibrés :
 
 ```{r}
 top10_pred_des <- pred_2526_out %>%
@@ -529,7 +532,7 @@ knitr::kable(top10_pred_des)
 ```
 Ces matches oppposent généralement une équipe en forte dynamique à une équipe en difficulté.
 
-Ici Matches les plus incertains :
+Ici on a les matchs les plus incertains :
 
 ```{r}
 top10_pred_inc <- pred_2526_out %>%
@@ -539,11 +542,11 @@ head(10)
 saveRDS(top10_pred_inc, "top10_pred_inc.rds")
 knitr::kable(top10_pred_inc)
 ```
-Ces matches correspondent souvent à des équipes proches en termes de performance, des débuts de saison ou des confrontations historiquement équilibrées. 
+Ces matchs correspondent souvent à des équipes proches en termes de performance, des débuts de saison ou des confrontations historiquement équilibrées. 
 
 ## 2) Génération des probabilités de victoire pour les matchs futurs de la saison 25/26 
 
-### (i)Ajout des rencontres non disponible dans la base de donnée 25/26 
+### (i) Ajout des rencontres non disponible dans la base de donnée 25/26 
 Comme la base de donnée de la saison 25/26 contient que les matchs qui ont été déjà joué, il faut ajouter les matches restants de la saison 25/26. On peut maintenant avoir également une prédiction sur les matchs futurs.
 
 ```{r}
@@ -966,7 +969,7 @@ fiche_predictions <- fiche_predictions %>%
       ))
 ```
 
-# V) L'Interface
+# (xix) L'interface
 
 ```{r}
 ui <- fluidPage(
